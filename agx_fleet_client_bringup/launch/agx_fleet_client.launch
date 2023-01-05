@@ -1,0 +1,19 @@
+<launch>
+
+  <arg name="agx_robot_prefix" value="limo_1"/>
+
+
+  <!-- launch the free fleet client first -->
+  <node name="$(arg limo_prefix)_fleet_client_node" 
+      pkg="agx_fleet_client_ros1"
+      type="agx_fleet_client_ros1" output="screen">
+    <param name="fleet_name" type="string" value="agx_fleet"/>
+    <param name="robot_name" type="string" value="$(arg agx_robot_prefix)"/>
+    <param name="level_name" type="string" value="L1"/>
+    <param name="dds_domain" type="int" value="42"/>
+    <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
+    <param name="battery_state_topic" value="battery_state"/>
+    <param name="robot_frame" value="base_link"/>
+    <param name="move_base_server_name" value="move_base"/>
+  </node>
+</launch>
