@@ -4,7 +4,6 @@
 
 ## Contents
 
-- **[About](#About)**
 - **[Installation Instructions](#installation-instructions)**
   - [Prerequisites](#prerequisites)
   - [Message Generation](#message-generation)
@@ -18,18 +17,6 @@
   - [ROS 1 Multi Turtlebot3 Simulation](#ros-1-multi-turtlebot3-simulation)
   - [Commands and Requests](#commands-and-requests)
 - **[Plans](#plans)**
-
-</br>
-</br>
-
-## About
-
-Welcome to `free_fleet`, an open-source robot fleet management system. 
-Sometimes it is called the "Fun Free Fleet For Friends" (F5).
-
-**Note**, this repository is under active development. Things will be quite unstable
-for a while. Please open an issue ticket on this repo if you have problems.
-Cheers.
 
 </br>
 </br>
@@ -53,45 +40,34 @@ sudo apt update && sudo apt install \
   # maven default-jdk   # Uncomment to install dependencies for message generation
 ```
 
-</br>
 
-### Message Generation
-
-Message generation via `FleetMessages.idl` is done using `dds_idlc` from `CycloneDDS`. For convenience, the generated mesasges and files has been done offline and committed into the code base. They can be found [here](./free_fleet/src/messages/FleetMessages.idl).
-
-```bash
-./dds_idlc -allstructs FleetMessages.idl
-```
-
-</br>
 
 ### Client in ROS 1
 
 Start a new ROS 1 workspace, and pull in the necessary repositories,
 
 ```bash
-mkdir -p ~/ff_ros1_ws/src
-cd ~/ff_ros1_ws/src
-git clone https://github.com/open-rmf/free_fleet -b main
-git clone https://github.com/eclipse-cyclonedds/cyclonedds -b releases/0.7.x
+mkdir -p ~/agx_fleet_ws/src
+cd ~/agx_fleet_ws/src
+git clone https://github.com/lagrangeluo/agx_fleet_client.git
 ```
 
 Install all the dependencies through `rosdep`,
 
 ```bash
-cd ~/ff_ros1_ws
+cd ~/agx_fleet_ws
 rosdep install --from-paths src --ignore-src --rosdistro noetic -yr
 ```
 
 Source ROS 1 and build,
 
 ```bash
-cd ~/ff_ros1_ws
+cd ~/agx_fleet_ws
 source /opt/ros/noetic/setup.bash
 colcon build
 ```
 
-</br>
+
 
 ### Client and Server in ROS 2
 
@@ -123,8 +99,7 @@ colcon build
 #     free_fleet ff_examples_ros2 free_fleet_server_ros2 free_fleet_client_ros2
 ```
 
-</br>
-</br>
+
 
 ## Examples
 
