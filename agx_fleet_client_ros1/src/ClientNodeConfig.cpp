@@ -38,7 +38,7 @@ void ClientNodeConfig::get_param_if_available(
   else
   {
     ROS_WARN("Not Found %s on the parameter server",
-        _key.c_str())
+        _key.c_str());
   }
 }
 
@@ -56,7 +56,7 @@ void ClientNodeConfig::get_param_if_available(
     else
   {
     ROS_WARN("Not Found %s on the parameter server",
-        _key.c_str())
+        _key.c_str());
   }
 
 }
@@ -75,7 +75,7 @@ void ClientNodeConfig::get_param_if_available(
     else
   {
     ROS_WARN("Not Found %s on the parameter server",
-        _key.c_str())
+        _key.c_str());
   }
 
 }

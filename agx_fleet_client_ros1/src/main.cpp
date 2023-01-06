@@ -22,8 +22,10 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "free_fleet_client_ros1");
   ros::NodeHandle ros_node_handle;
-  ROS_INFO("Hi!This is agx_fleet_client in ros1");
 
+  std::cout << "-------------------------------------------" << std::endl;
+  std::cout << "----Hi!This is agx_fleet_client in ros1----" << std::endl;
+  
   auto config = free_fleet::ros1::ClientNodeConfig::make();
   
   ROS_INFO("get param down!");
