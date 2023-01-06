@@ -2,8 +2,8 @@
 <package format="2">
   <name>agx_fleet_client_bringup</name>
   <version>1.0.0</version>
-  <description>A package containing agx fleet client for ROS1</description>
-  <maintainer email="junyu.luo@agilex.ai">Junyu Luo</maintainer>
+  <description>A package containing some examples of using free fleet ROS1 components</description>
+  <maintainer email="aaron@openrobotics.org">Aaron Chong</maintainer>
   <license>Apache 2.0</license>
   <author email="aaron@openrobotics.org">Aaron Chong</author>
 
@@ -12,6 +12,10 @@
   <exec_depend>ff_rviz_plugins_ros1</exec_depend>
   <exec_depend>agx_fleet_client_ros1</exec_depend>
 
+  <exec_depend>turtlebot3_bringup</exec_depend>
+  <exec_depend>turtlebot3_gazebo</exec_depend>
+  <exec_depend>turtlebot3_navigation</exec_depend>
+  <exec_depend>gazebo_plugins</exec_depend>
   <exec_depend>dwa_local_planner</exec_depend>
   <exec_depend>amcl</exec_depend>
   <exec_depend>move_base</exec_depend>

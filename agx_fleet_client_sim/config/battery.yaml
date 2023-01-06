@@ -1,0 +1,19 @@
+header:
+  seq: 0
+  stamp: 0
+  frame_id: 'tb3_1'
+voltage: 12
+temperature: 20
+current: 5.0
+charge: 24
+capacity: 24
+design_capacity: 24
+percentage: 1.0
+power_supply_status: 0
+power_supply_health: 0
+power_supply_technology: 0
+present: 1
+cell_voltage: [12]
+cell_temperature: [26]
+location: 'L1'
+serial_number: '0'
