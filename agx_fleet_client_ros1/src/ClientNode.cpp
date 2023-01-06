@@ -33,8 +33,13 @@ ClientNode::SharedPtr ClientNode::make(const ClientNodeConfig& _config)
   ClientConfig client_config = _config.get_client_config();
   Client::SharedPtr client = Client::make(client_config);
   if (!client)
+  {
     return nullptr;
-
+    ROS_ERROR("instantiate the client failed!!!")
+  }
+  else
+    ROS_INFO("client instantiated success!!!")
+    
   /// Setting up the move base action client, wait for server
   ROS_INFO("waiting for connection with move base action server: %s",
       _config.move_base_server_name.c_str());
@@ -328,6 +333,8 @@ bool ClientNode::read_mode_request()
     request_error = false;
     return true;
   }
+
+  ROS_WARN("the Mode command is invalid!");
   return false;
 }
 
@@ -399,6 +406,8 @@ bool ClientNode::read_path_request()
     request_error = false;
     return true;
   }
+
+  ROS_WARN("the Path command is invalid!");
   return false;
 }
 
@@ -435,6 +444,8 @@ bool ClientNode::read_destination_request()
     request_error = false;
     return true;
   }
+
+  ROS_WARN("the destination command is invalid!");
   return false;
 }
 

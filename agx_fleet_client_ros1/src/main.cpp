@@ -22,9 +22,11 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "free_fleet_client_ros1");
   ros::NodeHandle ros_node_handle;
-  ROS_INFO("This is agx_fleet_client_ros1");
+  ROS_INFO("Hi!This is agx_fleet_client in ros1");
 
   auto config = free_fleet::ros1::ClientNodeConfig::make();
+  
+  ROS_INFO("get param down!");
 
   auto client_node = free_fleet::ros1::ClientNode::make(config);
 
