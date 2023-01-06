@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "free_fleet_client_ros1");
   ros::NodeHandle ros_node_handle;
-  ROS_INFO("Greetings from free_fleet_client_ros1");
+  ROS_INFO("This is agx_fleet_client_ros1");
 
   auto config = free_fleet::ros1::ClientNodeConfig::make();
 
@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 
   if (!client_node)
   {
-    ROS_ERROR("free_fleet_client_ros1: unable to initialize.");
+    ROS_ERROR("agx_fleet_client_ros1: unable to initialize.");
     return 1;
   }
   return 0;

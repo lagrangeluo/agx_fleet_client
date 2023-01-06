@@ -35,6 +35,11 @@ void ClientNodeConfig::get_param_if_available(
         _key.c_str(), _key.c_str(), tmp_param.c_str());
     _param_out = tmp_param;
   }
+  else
+  {
+    ROS_WARN("Not Found %s on the parameter server",
+        _key.c_str())
+  }
 }
 
 void ClientNodeConfig::get_param_if_available(
@@ -48,6 +53,12 @@ void ClientNodeConfig::get_param_if_available(
         _key.c_str(), _key.c_str(), tmp_param);
     _param_out = tmp_param;
   }
+    else
+  {
+    ROS_WARN("Not Found %s on the parameter server",
+        _key.c_str())
+  }
+
 }
 
 void ClientNodeConfig::get_param_if_available(
@@ -61,6 +72,12 @@ void ClientNodeConfig::get_param_if_available(
         _key.c_str(), _key.c_str(), tmp_param);
     _param_out = tmp_param;
   }
+    else
+  {
+    ROS_WARN("Not Found %s on the parameter server",
+        _key.c_str())
+  }
+
 }
 
 void ClientNodeConfig::print_config() const
