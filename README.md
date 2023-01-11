@@ -1,6 +1,6 @@
 ![](https://github.com/open-rmf/free_fleet/workflows/build/badge.svg)
 
-# Free Fleet
+# Agilex Fleet Client
 
 ## Contents
 

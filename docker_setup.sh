@@ -11,6 +11,7 @@ Blue="\033[0;34m"         # Blue
 Purple="\033[0;35m"       # Purple
 Red="\033[0;31m"          # Red
 CHOOSE=1
+VERSION=1
 
 function PRINT_MENU()
 {
@@ -56,6 +57,16 @@ function start_image()
 PRINT_MENU
 
 read CHOOSE
+
+    echo -e "${_Yellow} chosen get! ${_NORMAL}"
+    echo -e "${_BOLD}-------------------${_NORMAL}"
+    echo -e "${_GREEN} chose your version ${_NORMAL}"
+    echo -e "${_Yellow} 1.x86_64 amd64${_NORMAL}"
+    echo -e "${Blue} 2.arm64 ${_NORMAL}"
+    echo -n "Your chose(1-2):"
+
+read VERSION
+
 
 case "${CHOOSE}" in
     1)

@@ -4,7 +4,7 @@
 
 
   <!-- launch the free fleet client first -->
-  <node name="$(arg limo_prefix)_fleet_client_node" 
+  <node name="$(arg agx_robot_prefix)_fleet_client_node" 
       pkg="agx_fleet_client_ros1"
       type="agx_fleet_client_ros1" output="screen">
     <param name="fleet_name" type="string" value="agx_fleet"/>
