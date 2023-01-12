@@ -29,15 +29,12 @@ function PRINT_MENU()
 
 function BUILD_IMAGE() {
     Docker_file=Dockerfile
-    image_tag=agx_fleet_client:v1
     docker build --file $Docker_file --tag $image_tag .
     echo -e "${_GREEN} image agx_fleet_client build success!${_NORMAL}"
 }
 
 function start_image()
 {
-    image_tag=agx_fleet_client:v1
-    
     docker run \
         -it \
         --network host \
@@ -67,6 +64,14 @@ read CHOOSE
 
 read VERSION
 
+case "${VERSION}" in
+    1)
+    image_tag=agx_fleet_client:v1
+    ;;
+    2)
+    image_tag=agx_fleet_client:v2
+    ;;
+esac
 
 case "${CHOOSE}" in
     1)
