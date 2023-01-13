@@ -41,6 +41,9 @@
 
 #include "ClientNodeConfig.hpp"
 
+#include <support_ros/navitaskAction.h>
+#include <support_ros/navitaskGoal.h>
+
 namespace free_fleet
 {
 namespace ros1
@@ -54,9 +57,14 @@ public:
   using ReadLock = std::unique_lock<std::mutex>;
   using WriteLock = std::unique_lock<std::mutex>;
 
-  using MoveBaseClient = 
+  /*using MoveBaseClient = 
       actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
   using MoveBaseClientSharedPtr = std::shared_ptr<MoveBaseClient>;
+  */
+  using NavisActionClient = 
+      actionlib::SimpleActionClient<support_ros::navitask>;
+  using NavisActionClientSharedPtr = std::shared_ptr<NavisActionClient>;
+ 
   using GoalState = actionlib::SimpleClientGoalState;
 
   static SharedPtr make(const ClientNodeConfig& config);
@@ -69,7 +77,7 @@ public:
     Client::SharedPtr client;
 
     /// move base action client
-    MoveBaseClientSharedPtr move_base_client;
+    NavisActionClientSharedPtr move_base_client;
 
     /// Docking server client
     std::unique_ptr<ros::ServiceClient> docking_trigger_client;
@@ -149,6 +157,9 @@ private:
   move_base_msgs::MoveBaseGoal location_to_move_base_goal(
       const messages::Location& location) const;
 
+  support_ros::navitaskGoal location_to_move_base_goal(
+      const messages::Location& location,int use_navi_bool) const;
+
   std::mutex task_id_mutex;
 
   std::string current_task_id;
@@ -156,7 +167,8 @@ private:
   struct Goal
   {
     std::string level_name;
-    move_base_msgs::MoveBaseGoal goal;
+    //move_base_msgs::MoveBaseGoal goal;
+    support_ros::navitaskGoal goal;
     bool sent = false;
     uint32_t aborted_count = 0;
     ros::Time goal_end_time;

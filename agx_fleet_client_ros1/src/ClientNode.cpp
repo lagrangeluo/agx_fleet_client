@@ -43,8 +43,8 @@ ClientNode::SharedPtr ClientNode::make(const ClientNodeConfig& _config)
   /// Setting up the move base action client, wait for server
   ROS_INFO("waiting for connection with move base action server: %s",
       _config.move_base_server_name.c_str());
-  MoveBaseClientSharedPtr move_base_client(
-      new MoveBaseClient(_config.move_base_server_name, true));
+  NavisActionClientSharedPtr move_base_client(
+      new NavisActionClient(_config.move_base_server_name, true));
   if (!move_base_client->waitForServer(ros::Duration(_config.wait_timeout)))
   {
     ROS_ERROR("timed out waiting for action server: %s",
@@ -277,6 +277,27 @@ move_base_msgs::MoveBaseGoal ClientNode::location_to_move_base_goal(
   return goal;
 }
 
+
+support_ros::navitaskGoal location_to_move_base_goal(
+      const messages::Location& location,int use_navi_bool) const
+{
+  support_ros::navitaskGoal goal;
+  goal.loop_time=1;
+  goal.keep_cycle=false;
+
+  goal.point_task.point_stack.header.frame_id = client_node_config.map_frame;
+  goal.point_task.point_stack.header.stamp.sec = _location.sec;
+  goal.point_task.point_stack.header.stamp.nsec = _location.nanosec;
+  goal.point_task.point_stack.pose.position.x = _location.x;
+  goal.point_task.point_stack.pose.position.y = _location.y;
+  goal.point_task.point_stack.pose.z = 0.0;
+  goal.point_task.point_stack.pose.orientation = get_quat_from_yaw(_location.yaw);
+
+  goal.point_task.behavior='';
+  goal.point_task.behavior_max_time=0;
+  return goal
+}
+
 bool ClientNode::read_mode_request()
 {
   messages::ModeRequest mode_request;
@@ -389,7 +410,7 @@ bool ClientNode::read_path_request()
       goal_path.push_back(
           Goal {
               path_request.path[i].level_name,
-              location_to_move_base_goal(path_request.path[i]),
+              location_to_move_base_goal(path_request.path[i],1),
               false,
               0,
               ros::Time(
@@ -426,7 +447,7 @@ bool ClientNode::read_destination_request()
     goal_path.push_back(
         Goal {
             destination_request.destination.level_name,
-            location_to_move_base_goal(destination_request.destination),
+            location_to_move_base_goal(destination_request.destination,1),
             false,
             0,
             ros::Time(
