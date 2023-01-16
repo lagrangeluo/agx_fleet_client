@@ -62,7 +62,7 @@ public:
   using MoveBaseClientSharedPtr = std::shared_ptr<MoveBaseClient>;
   */
   using NavisActionClient = 
-      actionlib::SimpleActionClient<support_ros::navitask>;
+      actionlib::SimpleActionClient<support_ros::navitaskAction>;
   using NavisActionClientSharedPtr = std::shared_ptr<NavisActionClient>;
  
   using GoalState = actionlib::SimpleClientGoalState;
@@ -155,10 +155,10 @@ private:
       const std::string& request_task_id);
 
   move_base_msgs::MoveBaseGoal location_to_move_base_goal(
-      const messages::Location& location) const;
+      const messages::Location& _location) const;
 
   support_ros::navitaskGoal location_to_move_base_goal(
-      const messages::Location& location,int use_navi_bool) const;
+      const messages::Location& _location,int use_navi_bool) const;
 
   std::mutex task_id_mutex;
 

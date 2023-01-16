@@ -227,7 +227,7 @@ void ClientNode::publish_robot_state()
     new_robot_state.location.level_name = client_node_config.level_name;
   }
 
-  new_robot_state.path.clear();
+  /*new_robot_state.path.clear();
   {
     ReadLock goal_path_lock(goal_path_mutex);
 
@@ -244,8 +244,26 @@ void ClientNode::publish_robot_state()
               goal_path[i].level_name
           });
     }
-  }
+  }*/
 
+  new_robot_state.path.clear();
+  {
+    ReadLock goal_path_lock(goal_path_mutex);
+
+    for (size_t i = 0; i < goal_path.size(); ++i)
+    {
+      new_robot_state.path.push_back(
+          messages::Location{
+              (int32_t)goal_path[i].goal.point_task[0].point_stack.header.stamp.sec,
+              goal_path[i].goal.point_task[0].point_stack.header.stamp.nsec,
+              (float)goal_path[i].goal.point_task[0].point_stack.pose.position.x,
+              (float)goal_path[i].goal.point_task[0].point_stack.pose.position.y,
+              (float)(get_yaw_from_quat(
+                  goal_path[i].goal.point_task[0].point_stack.pose.orientation)),
+              goal_path[i].level_name
+          });
+    }
+  }
   if (!fields.client->send_robot_state(new_robot_state))
     ROS_WARN("failed to send robot state: msg sec %u", new_robot_state.location.sec);
 }
@@ -278,24 +296,24 @@ move_base_msgs::MoveBaseGoal ClientNode::location_to_move_base_goal(
 }
 
 
-support_ros::navitaskGoal location_to_move_base_goal(
-      const messages::Location& location,int use_navi_bool) const
+support_ros::navitaskGoal ClientNode::location_to_move_base_goal(
+      const messages::Location& _location,int use_navi_bool) const
 {
   support_ros::navitaskGoal goal;
   goal.loop_time=1;
   goal.keep_cycle=false;
 
-  goal.point_task.point_stack.header.frame_id = client_node_config.map_frame;
-  goal.point_task.point_stack.header.stamp.sec = _location.sec;
-  goal.point_task.point_stack.header.stamp.nsec = _location.nanosec;
-  goal.point_task.point_stack.pose.position.x = _location.x;
-  goal.point_task.point_stack.pose.position.y = _location.y;
-  goal.point_task.point_stack.pose.z = 0.0;
-  goal.point_task.point_stack.pose.orientation = get_quat_from_yaw(_location.yaw);
+  goal.point_task[0].point_stack.header.frame_id = client_node_config.map_frame;
+  goal.point_task[0].point_stack.header.stamp.sec = _location.sec;
+  goal.point_task[0].point_stack.header.stamp.nsec = _location.nanosec;
+  goal.point_task[0].point_stack.pose.position.x = _location.x;
+  goal.point_task[0].point_stack.pose.position.y = _location.y;
+  goal.point_task[0].point_stack.pose.position.z = 0.0;
+  goal.point_task[0].point_stack.pose.orientation = get_quat_from_yaw(_location.yaw);
 
-  goal.point_task.behavior='';
-  goal.point_task.behavior_max_time=0;
-  return goal
+  goal.point_task[0].behavior="";
+  goal.point_task[0].behavior_max_time=0;
+  return goal;
 }
 
 bool ClientNode::read_mode_request()
