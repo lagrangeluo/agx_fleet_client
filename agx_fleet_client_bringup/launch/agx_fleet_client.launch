@@ -13,7 +13,8 @@
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
     <param name="battery_state_topic" value="battery_state"/>
-    <param name="robot_frame" value="base_link"/>
-    <param name="move_base_server_name" value="move_base"/>
+    <param name="robot_frame" value="base_link_2d"/>
+    <param name="map_frame" value="map_2d"/>
+    <param name="move_base_server_name" value="navitask"/>
   </node>
 </launch>

@@ -252,16 +252,19 @@ void ClientNode::publish_robot_state()
 
     for (size_t i = 0; i < goal_path.size(); ++i)
     {
+      for(size_t j =0; j < goal_path.goal[i].point_task.size(); ++j)
+      {
       new_robot_state.path.push_back(
           messages::Location{
-              (int32_t)goal_path[i].goal.point_task[0].point_stack.header.stamp.sec,
-              goal_path[i].goal.point_task[0].point_stack.header.stamp.nsec,
-              (float)goal_path[i].goal.point_task[0].point_stack.pose.position.x,
-              (float)goal_path[i].goal.point_task[0].point_stack.pose.position.y,
+              (int32_t)goal_path[i].goal.point_task[j].point_stack.header.stamp.sec,
+              goal_path[i].goal.point_task[j].point_stack.header.stamp.nsec,
+              (float)goal_path[i].goal.point_task[j].point_stack.pose.position.x,
+              (float)goal_path[i].goal.point_task[j].point_stack.pose.position.y,
               (float)(get_yaw_from_quat(
-                  goal_path[i].goal.point_task[0].point_stack.pose.orientation)),
+                  goal_path[i].goal.point_task[j].point_stack.pose.orientation)),
               goal_path[i].level_name
           });
+      }
     }
   }
   if (!fields.client->send_robot_state(new_robot_state))
@@ -300,19 +303,21 @@ support_ros::navitaskGoal ClientNode::location_to_move_base_goal(
       const messages::Location& _location,int use_navi_bool) const
 {
   support_ros::navitaskGoal goal;
+  support_ros::MetaPoint metapoint;
   goal.loop_time=1;
   goal.keep_cycle=false;
 
-  goal.point_task[0].point_stack.header.frame_id = client_node_config.map_frame;
-  goal.point_task[0].point_stack.header.stamp.sec = _location.sec;
-  goal.point_task[0].point_stack.header.stamp.nsec = _location.nanosec;
-  goal.point_task[0].point_stack.pose.position.x = _location.x;
-  goal.point_task[0].point_stack.pose.position.y = _location.y;
-  goal.point_task[0].point_stack.pose.position.z = 0.0;
-  goal.point_task[0].point_stack.pose.orientation = get_quat_from_yaw(_location.yaw);
+  metapoint.point_stack.header.frame_id = client_node_config.map_frame;
+  metapoint.point_stack.header.stamp.sec = _location.sec;
+  metapoint.point_stack.header.stamp.nsec = _location.nanosec;
+  metapoint.point_stack.pose.position.x = _location.x;
+  metapoint.point_stack.pose.position.y = _location.y;
+  metapoint.point_stack.pose.position.z = 0.0;
+  metapoint.point_stack.pose.orientation = get_quat_from_yaw(_location.yaw);
+  metapoint.behavior="";
+  metapoint.behavior_max_time=0;
 
-  goal.point_task[0].behavior="";
-  goal.point_task[0].behavior_max_time=0;
+  goal.point_task.push_back(metapoint);
   return goal;
 }
 
@@ -564,6 +569,11 @@ void ClientNode::handle_requests()
         goal_path.clear();
         return;
       }
+    }
+    else if (current_goal_state == GoalState::PENDING)
+    {
+      ROS_INFO("GoalStaTe:PENDING");
+      return;
     }
     else
     {
