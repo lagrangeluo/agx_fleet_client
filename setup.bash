@@ -1,3 +1,5 @@
+#!bin/bash
+
 source /opt/ros/noetic/setup.bash
 
 sudo apt-get -y install python3-pip \

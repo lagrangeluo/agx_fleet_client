@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.ipp": "cpp",
+        "*.tcc": "cpp",
+        "bitset": "cpp",
+        "future": "cpp",
+        "shared_mutex": "cpp",
+        "regex": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp",
+        "bit": "cpp",
+        "optional": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp"
+    }
+}
