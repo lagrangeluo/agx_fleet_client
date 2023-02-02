@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="agx_robot_prefix" value="limo_1"/>
+  <arg name="agx_robot_prefix" value="scout_1"/>
 
 
   <!-- launch the free fleet client first -->

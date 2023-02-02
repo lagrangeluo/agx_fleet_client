@@ -1,7 +1,7 @@
 header:
   seq: 0
   stamp: 0
-  frame_id: 'tb3_1'
+  frame_id: 'scout_1'
 voltage: 12
 temperature: 20
 current: 5.0
