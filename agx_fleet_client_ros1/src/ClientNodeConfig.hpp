@@ -58,6 +58,8 @@ struct ClientNodeConfig
 
   double max_dist_to_first_waypoint = 10.0;
 
+  bool if_use_path_command = false;
+
   void get_param_if_available(
       const ros::NodeHandle& node, const std::string& key, 
       std::string& param_out);

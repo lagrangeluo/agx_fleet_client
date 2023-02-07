@@ -111,6 +111,11 @@ void ClientNode::start(Fields _fields)
       client_node_config.battery_state_topic, 1,
       &ClientNode::battery_state_callback_fn, this);
 
+  muti_path_pub = node->advertise<mutipath_pub_msg>("/muti_path_nav", 1);
+
+  waypoint_add_srv = node->serviceClient<setWaypoint_srv>("/waypoint_creater/add_waypoint");
+  clear_srv = node->serviceClient<clear_waypoint_srv>("/waypoint_creater/clear_waypoints");
+
   request_error = false;
   emergency = false;
   paused = false;
@@ -321,6 +326,44 @@ support_ros::navitaskGoal ClientNode::location_to_move_base_goal(
   return goal;
 }
 
+setWaypoint_response get_path_from_waypoint(
+    const messages::PathRequest& _path_request)
+{
+  clear_srv.call();
+  memset(&add_waypoint, 0, sizeof(add_waypoint));
+  setWaypoint_response res;
+    
+  for (size_t i = 0; i < _path_request.path.size(); ++i)
+  {
+    add_waypoint.request.type=1;
+    add_waypoint.request.point.x=_path_request.path[i].x;
+    add_waypoint.request.point.y=_path_request.path[i].y;
+    add_waypoint.request.point.z=0;
+
+    res=waypoint_add_srv.call(add_waypoint);
+  }
+  return res
+}
+
+  mutipath_pub_msg waypoint_to_mutipath(
+    const setWaypoint_response& _waypoint_res)
+  {
+    mutipath_pub_msg msg;
+    memset(&mutipath_msg, 0, sizeof(mutipath_msg));
+    
+    for (size_t i = 0; i < _waypoint_res.paths.size(); ++i)
+    {
+      for(size_t j = 0; j < _waypoint_res.paths[i].points.size(); ++j)
+      {
+        msg.task[i].path_stack.poses[j].header.frame_id =  map_frame;
+        msg.task[i].path_stack.poses[j].pose.position.x = _waypoint_res.paths[i].points[j].x;
+        msg.task[i].path_stack.poses[j].pose.position.y = _waypoint_res.paths[i].points[j].y;
+        msg.task[i].path_stack.poses[j].pose.orientation = get_quat_from_yaw(_waypoint_res.paths[i].points[j].theta*3.14159/180.0);
+      } 
+    }
+  return msg;
+  }
+
 bool ClientNode::read_mode_request()
 {
   messages::ModeRequest mode_request;
@@ -440,6 +483,11 @@ bool ClientNode::read_path_request()
                   path_request.path[i].sec, path_request.path[i].nanosec)});
     }
 
+      if(if_use_path_command)
+      {
+        sent_flag=true;
+        add_waypoint_res = get_path_from_waypoint(path_request);
+      }
     WriteLock task_id_lock(task_id_mutex);
     current_task_id = path_request.task_id;
 
@@ -504,6 +552,19 @@ void ClientNode::handle_requests()
   if (emergency || request_error || paused)
     return;
 
+  if(if_use_path_command)
+  {
+    if (!goal_path.empty())
+    {
+      if(sent_flag=true)
+      {
+        mutipath_msg=waypoint_to_mutipath(add_waypoint_res);
+        muti_path_pub.publish(mutipath_msg);
+        sent_flag=false;
+      }
+    }
+    return;
+  }
   // ooooh we have goals
   WriteLock goal_path_lock(goal_path_mutex);
   if (!goal_path.empty())

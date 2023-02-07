@@ -16,5 +16,7 @@
     <param name="robot_frame" value="base_link_2d"/>
     <param name="map_frame" value="map_2d"/>
     <param name="move_base_server_name" value="navitask"/>
+    <param name="if_use_path_command" value="false"/>
+
   </node>
 </launch>

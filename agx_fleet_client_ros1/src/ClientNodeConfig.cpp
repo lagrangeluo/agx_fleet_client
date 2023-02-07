@@ -159,6 +159,10 @@ ClientNodeConfig ClientNodeConfig::make()
   config.get_param_if_available(
       node_private_ns, "max_dist_to_first_waypoint", 
       config.max_dist_to_first_waypoint);
+  config.get_param_if_available(
+      node_private_ns, "if_use_path_command", 
+      config.if_use_path_command);
+      
   return config;
 }
 

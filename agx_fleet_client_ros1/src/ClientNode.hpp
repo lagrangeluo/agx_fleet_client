@@ -44,6 +44,11 @@
 #include <support_ros/navitaskAction.h>
 #include <support_ros/navitaskGoal.h>
 
+#include <tools_msgs/setWaypoint.h>
+#include <std_srvs/Empty>
+
+#include <support_ros/MutiPath.h>
+
 namespace free_fleet
 {
 namespace ros1
@@ -66,6 +71,14 @@ public:
   using NavisActionClientSharedPtr = std::shared_ptr<NavisActionClient>;
  
   using GoalState = actionlib::SimpleClientGoalState;
+
+//调用waypoint_creater节点的服务生成路径点
+  using clear_waypoint_srv = std_srvs::Empty;
+  using setWaypoint_srv = tools_msgs::setWaypoint;
+  using setWaypoint_request = tools_msgs::setWaypoint::Request;
+  using setWaypoint_response = tools_msgs::setWaypoint::Response;
+
+  using mutipath_pub_msg = support_ros::MutiPath;
 
   static SharedPtr make(const ClientNodeConfig& config);
 
@@ -194,6 +207,29 @@ private:
   void update_thread_fn();
 
   void publish_thread_fn();
+
+  // --------------------------------------------------------------------------
+  //ros service interface
+  bool sent_flag = false;
+
+  ros::ServiceClient clear_srv;
+  ros::ServiceClient waypoint_add_srv;
+
+  setWaypoint_srv add_waypoint;
+  setWaypoint_response add_waypoint_res;
+
+  setWaypoint_response get_path_from_waypoint(
+    const messages::PathRequest& _location);
+
+// ----------------------------------------------------------------------------
+//muti_path_nav publisher
+
+  ros::Publisher muti_path_pub;
+
+  mutipath_pub_msg mutipath_msg;
+
+  mutipath_pub_msg waypoint_to_mutipath(
+    const setWaypoint_response& _waypoint_res);
 
   // --------------------------------------------------------------------------
 

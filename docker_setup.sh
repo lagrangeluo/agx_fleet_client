@@ -10,8 +10,11 @@ _Yellow="\033[0;36m"
 Blue="\033[0;34m"         # Blue
 Purple="\033[0;35m"       # Purple
 Red="\033[0;31m"          # Red
-CHOOSE=1
-VERSION=1
+
+CHOOSE=1 # chose your choice
+VERSION=1 # x86 or arm
+image_tag=agx_fleet_client:v2 # the name of docker image
+
 
 function PRINT_MENU()
 {
@@ -19,7 +22,7 @@ function PRINT_MENU()
     echo -e "${_Yellow} 1.Auto start (Recommend)${_NORMAL}"
     echo -e "${Blue} 2.Build image${_NORMAL}"
     echo -e "${Purple} 3.Start Container${_NORMAL}"
-    echo -e "${Red} 4.Delete Container${_NORMAL}"
+    echo -e "${Red} 4.just start Container${_NORMAL}"
     echo -e "${_GREEN} 5.Backup environment${_NORMAL}"
     echo -e "${_GREEN} 6.Restore environment${_NORMAL}"
     echo -e "${_BOLD}--------------------------${_NORMAL}"
@@ -49,6 +52,12 @@ function start_image()
 
     echo -e "${_GREEN} Container agx_fleet_client start success!${_NORMAL}"
     echo -e "${_GREEN} Now you can now connect to the container via SSH by using 'ssh -p 10022 root@ip' the password is 'agx'${_NORMAL}"
+}
+
+function start_container()
+{
+    docker start agx_fleet_client 
+    docker exec -it agx_fleet_client /bin/bash  
 }
 
 PRINT_MENU
@@ -85,7 +94,7 @@ case "${CHOOSE}" in
     start_image
     ;;
     4)
-    #docker rm -f limo_dev
+    start_container
     ;;
     5)
     #backup_container
