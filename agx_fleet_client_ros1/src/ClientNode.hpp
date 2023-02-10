@@ -45,7 +45,7 @@
 #include <support_ros/navitaskGoal.h>
 
 #include <tools_msgs/setWaypoint.h>
-#include <std_srvs/Empty>
+#include <std_srvs/Empty.h>
 
 #include <support_ros/MutiPath.h>
 
@@ -228,8 +228,8 @@ private:
 
   mutipath_pub_msg mutipath_msg;
 
-  mutipath_pub_msg waypoint_to_mutipath(
-    const setWaypoint_response& _waypoint_res);
+  bool waypoint_to_mutipath(
+    const setWaypoint_response& _waypoint_res,support_ros::MutiPath& _msg);
 
   // --------------------------------------------------------------------------
 

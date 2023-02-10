@@ -80,6 +80,25 @@ void ClientNodeConfig::get_param_if_available(
 
 }
 
+void ClientNodeConfig::get_param_if_available(
+    const ros::NodeHandle& _node, const std::string& _key,
+    bool& _param_out)
+{
+  bool tmp_param;
+  if (_node.getParam(_key, tmp_param))
+  {
+    ROS_INFO("Found %s on the parameter server. Setting %s to %d.",
+        _key.c_str(), _key.c_str(), tmp_param);
+    _param_out = tmp_param;
+  }
+    else
+  {
+    ROS_WARN("Not Found %s on the parameter server",
+        _key.c_str());
+  }
+
+}
+
 void ClientNodeConfig::print_config() const
 {
   printf("ROS 1 CLIENT CONFIGURATION\n");

@@ -257,7 +257,7 @@ void ClientNode::publish_robot_state()
 
     for (size_t i = 0; i < goal_path.size(); ++i)
     {
-      for(size_t j =0; j < goal_path.goal[i].point_task.size(); ++j)
+      for(size_t j =0; j < goal_path[i].goal.point_task.size(); ++j)
       {
       new_robot_state.path.push_back(
           messages::Location{
@@ -326,42 +326,71 @@ support_ros::navitaskGoal ClientNode::location_to_move_base_goal(
   return goal;
 }
 
-setWaypoint_response get_path_from_waypoint(
+tools_msgs::setWaypoint::Response ClientNode::get_path_from_waypoint(
     const messages::PathRequest& _path_request)
 {
-  clear_srv.call();
-  memset(&add_waypoint, 0, sizeof(add_waypoint));
+  std_srvs::Empty::Request req_empty;
+  std_srvs::Empty::Response rep_empty;
   setWaypoint_response res;
-    
-  for (size_t i = 0; i < _path_request.path.size(); ++i)
-  {
-    add_waypoint.request.type=1;
-    add_waypoint.request.point.x=_path_request.path[i].x;
-    add_waypoint.request.point.y=_path_request.path[i].y;
-    add_waypoint.request.point.z=0;
 
-    res=waypoint_add_srv.call(add_waypoint);
+  if(clear_srv.call(req_empty,rep_empty))
+  {
+    ROS_INFO("erase older waypoint successfully!");
+    memset(&add_waypoint, 0, sizeof(add_waypoint));
+      
+    for(size_t i = 0; i < _path_request.path.size(); ++i)
+    {
+      memset(&add_waypoint.request, 0, sizeof(add_waypoint.request));
+      add_waypoint.request.waypoint.type=1;
+      if(i < _path_request.path.size()-1)
+      {
+        add_waypoint.request.waypoint.control_point.x=_path_request.path[i].x;
+        add_waypoint.request.waypoint.control_point.y=_path_request.path[i].y;
+        add_waypoint.request.waypoint.control_point.z=0;
+      }
+      add_waypoint.request.waypoint.point.x=_path_request.path[i].x;
+      add_waypoint.request.waypoint.point.y=_path_request.path[i].y;
+      add_waypoint.request.waypoint.point.z=0;
+
+      if(waypoint_add_srv.call(add_waypoint.request,res))
+        ROS_INFO("add waypoint successfully!");
+      else
+        ROS_ERROR("failed to add waypoint!");
+    }
   }
-  return res
+  else
+  {
+    ROS_ERROR("cannot erase the waypoint!");
+  }
+
+  return res;
 }
 
-  mutipath_pub_msg waypoint_to_mutipath(
-    const setWaypoint_response& _waypoint_res)
+  bool ClientNode::waypoint_to_mutipath(
+    const setWaypoint_response& _waypoint_res,support_ros::MutiPath& _msg)
   {
-    mutipath_pub_msg msg;
-    memset(&mutipath_msg, 0, sizeof(mutipath_msg));
+    mutipath_msg.task.clear();
+    
+    support_ros::MetaPath task;
+    geometry_msgs::PoseStamped poses;
+
+    mutipath_msg.loop_time=1;
     
     for (size_t i = 0; i < _waypoint_res.paths.size(); ++i)
     {
+      _msg.task.push_back(task);
       for(size_t j = 0; j < _waypoint_res.paths[i].points.size(); ++j)
       {
-        msg.task[i].path_stack.poses[j].header.frame_id =  map_frame;
-        msg.task[i].path_stack.poses[j].pose.position.x = _waypoint_res.paths[i].points[j].x;
-        msg.task[i].path_stack.poses[j].pose.position.y = _waypoint_res.paths[i].points[j].y;
-        msg.task[i].path_stack.poses[j].pose.orientation = get_quat_from_yaw(_waypoint_res.paths[i].points[j].theta*3.14159/180.0);
+        _msg.task[i].path_stack.poses.push_back(poses);
+
+        _msg.task[i].path_stack.poses[j].header.frame_id =  "map_2d";
+        _msg.task[i].path_stack.poses[j].pose.position.x = _waypoint_res.paths[i].points[j].x;
+        _msg.task[i].path_stack.poses[j].pose.position.y = _waypoint_res.paths[i].points[j].y;
+        _msg.task[i].path_stack.poses[j].pose.orientation = get_quat_from_yaw(_waypoint_res.paths[i].points[j].theta*3.14159/180.0);
       } 
     }
-  return msg;
+
+  return true;
   }
 
 bool ClientNode::read_mode_request()
@@ -483,10 +512,11 @@ bool ClientNode::read_path_request()
                   path_request.path[i].sec, path_request.path[i].nanosec)});
     }
 
-      if(if_use_path_command)
+      if(client_node_config.if_use_path_command == true)
       {
         sent_flag=true;
         add_waypoint_res = get_path_from_waypoint(path_request);
+        ROS_INFO("we got waypoint successfully!");
       }
     WriteLock task_id_lock(task_id_mutex);
     current_task_id = path_request.task_id;
@@ -552,14 +582,16 @@ void ClientNode::handle_requests()
   if (emergency || request_error || paused)
     return;
 
-  if(if_use_path_command)
+  if(client_node_config.if_use_path_command == true)
   {
     if (!goal_path.empty())
     {
-      if(sent_flag=true)
+      if(sent_flag==true)
       {
-        mutipath_msg=waypoint_to_mutipath(add_waypoint_res);
+        waypoint_to_mutipath(add_waypoint_res,mutipath_msg);
+        ROS_INFO("got mutipath!");
         muti_path_pub.publish(mutipath_msg);
+        ROS_INFO("publish mutipath_msg successfully!");
         sent_flag=false;
       }
     }

@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/ros/galactic/include/**"
+                "/opt/ros/noetic/include/**",
+                "/home/agilex/freego_ws/install/include/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
