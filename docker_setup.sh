@@ -13,7 +13,7 @@ Red="\033[0;31m"          # Red
 
 CHOOSE=1 # chose your choice
 VERSION=1 # x86 or arm
-image_tag=agx_fleet_client:v2 # the name of docker image
+image_tag=lagrangeluo/agx_fleet_client:v2 # the name of docker image
 
 
 function PRINT_MENU()
@@ -75,10 +75,10 @@ read VERSION
 
 case "${VERSION}" in
     1)
-    image_tag=agx_fleet_client:v1
+    image_tag=lagrangeluo/agx_fleet_client:v1
     ;;
     2)
-    image_tag=agx_fleet_client:v2
+    image_tag=lagrangeluo/agx_fleet_client:v2
     ;;
 esac
 
