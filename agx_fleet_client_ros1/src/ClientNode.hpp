@@ -231,7 +231,12 @@ private:
   bool waypoint_to_mutipath(
     const setWaypoint_response& _waypoint_res,support_ros::MutiPath& _msg);
 
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// check if the car arrive the waypoint(for path_nav mode add by L.L)
+
+  bool if_arrive_waypoint();
+
+// -------------------------------------------------------------------------
 
   ClientNodeConfig client_node_config;
 

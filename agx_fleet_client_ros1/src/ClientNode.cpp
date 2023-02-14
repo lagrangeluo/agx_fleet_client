@@ -342,14 +342,17 @@ tools_msgs::setWaypoint::Response ClientNode::get_path_from_waypoint(
     {
       memset(&add_waypoint.request, 0, sizeof(add_waypoint.request));
       add_waypoint.request.waypoint.type=1;
+
+      auto j = (_path_request.path.size()-1) - i; //暂不清楚为何path路径是反的，先取j值从尾部处理到头部
+
       if(i < _path_request.path.size()-1)
       {
-        add_waypoint.request.waypoint.control_point.x=_path_request.path[i].x;
-        add_waypoint.request.waypoint.control_point.y=_path_request.path[i].y;
+        add_waypoint.request.waypoint.control_point.x=_path_request.path[j].x;
+        add_waypoint.request.waypoint.control_point.y=_path_request.path[j].y;
         add_waypoint.request.waypoint.control_point.z=0;
       }
-      add_waypoint.request.waypoint.point.x=_path_request.path[i].x;
-      add_waypoint.request.waypoint.point.y=_path_request.path[i].y;
+      add_waypoint.request.waypoint.point.x=_path_request.path[j].x;
+      add_waypoint.request.waypoint.point.y=_path_request.path[j].y;
       add_waypoint.request.waypoint.point.z=0;
 
       if(waypoint_add_srv.call(add_waypoint.request,res))
@@ -375,7 +378,7 @@ tools_msgs::setWaypoint::Response ClientNode::get_path_from_waypoint(
     geometry_msgs::PoseStamped poses;
 
     mutipath_msg.loop_time=1;
-    
+
     for (size_t i = 0; i < _waypoint_res.paths.size(); ++i)
     {
       _msg.task.push_back(task);
@@ -391,6 +394,49 @@ tools_msgs::setWaypoint::Response ClientNode::get_path_from_waypoint(
     }
 
   return true;
+  }
+
+  bool ClientNode::if_arrive_waypoint()
+  {
+    if(goal_path.size() == 0)
+      return false;
+    else
+    {
+      auto pointer = goal_path.begin();
+      auto current_goal_x = (*pointer).goal.point_task.front().point_stack.pose.position.x;
+      auto current_goal_y = (*pointer).goal.point_task.front().point_stack.pose.position.y;
+      auto current_location_x = current_robot_transform.transform.translation.x;
+      auto current_location_y = current_robot_transform.transform.translation.y;
+
+      const double dx =
+          current_goal_x - 
+          current_robot_transform.transform.translation.x;
+      const double dy =
+          current_goal_y -
+          current_robot_transform.transform.translation.y;
+      const double dist_to_waypoint = sqrt(dx*dx + dy*dy);
+      
+      if(dist_to_waypoint < 0.2)
+      {
+        ROS_INFO("current goal state: SUCCEEEDED.");
+
+        goal_path.pop_front();
+        
+        /*if (ros::Time::now() >= goal_path.front().goal_end_time)
+        {
+          goal_path.pop_front();
+        }
+        else
+        {
+          ros::Duration wait_time_remaining =
+              goal_path.front().goal_end_time - ros::Time::now();
+          ROS_INFO(
+              "we reached our goal early! Waiting %.1f more seconds",
+              wait_time_remaining.toSec());
+        }*/
+      }
+      return true;
+    }
   }
 
 bool ClientNode::read_mode_request()
@@ -595,6 +641,8 @@ void ClientNode::handle_requests()
         sent_flag=false;
       }
     }
+
+    if_arrive_waypoint();
     return;
   }
   // ooooh we have goals
