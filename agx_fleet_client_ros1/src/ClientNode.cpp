@@ -389,7 +389,7 @@ tools_msgs::setWaypoint::Response ClientNode::get_path_from_waypoint(
         _msg.task[i].path_stack.poses[j].header.frame_id =  "map_2d";
         _msg.task[i].path_stack.poses[j].pose.position.x = _waypoint_res.paths[i].points[j].x;
         _msg.task[i].path_stack.poses[j].pose.position.y = _waypoint_res.paths[i].points[j].y;
-        _msg.task[i].path_stack.poses[j].pose.orientation = get_quat_from_yaw(_waypoint_res.paths[i].points[j].theta*3.14159/180.0);
+        _msg.task[i].path_stack.poses[j].pose.orientation = get_quat_from_yaw(_waypoint_res.paths[i].points[j].theta);
       } 
     }
 
