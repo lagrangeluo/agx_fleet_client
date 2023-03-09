@@ -526,6 +526,11 @@ void ClientNode::handle_requests()
         return;
       }
     }
+    else if (current_goal_state == GoalState::PENDING)
+    {
+      ROS_INFO("GoalStaTe:PENDING");
+      return;
+    }
     else
     {
       ROS_INFO("Undesirable goal state: %s",
