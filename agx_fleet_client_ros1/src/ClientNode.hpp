@@ -166,6 +166,8 @@ private:
 
   std::deque<Goal> goal_path;
 
+  std::string current_level_name;
+
   void read_requests();
 
   void handle_requests();

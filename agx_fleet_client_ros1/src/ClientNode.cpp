@@ -227,6 +227,10 @@ void ClientNode::publish_robot_state()
     new_robot_state.location.level_name = client_node_config.level_name;
   }
 
+  if(!current_level_name.empty())
+    new_robot_state.location.level_name = current_level_name;
+
+
   new_robot_state.path.clear();
   {
     ReadLock goal_path_lock(goal_path_mutex);
@@ -398,6 +402,9 @@ bool ClientNode::read_path_request()
 
     WriteLock task_id_lock(task_id_mutex);
     current_task_id = path_request.task_id;
+
+    //get current level name
+    current_level_name = path_request.path[0].level_name;
 
     if (paused)
       paused = false;
