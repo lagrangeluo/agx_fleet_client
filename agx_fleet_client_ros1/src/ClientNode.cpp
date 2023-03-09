@@ -231,6 +231,9 @@ void ClientNode::publish_robot_state()
         get_yaw_from_transform(current_robot_transform);
     new_robot_state.location.level_name = client_node_config.level_name;
   }
+  if(!current_level_name.empty())
+    new_robot_state.location.level_name = current_level_name;
+
 
   /*new_robot_state.path.clear();
   {
@@ -566,6 +569,7 @@ bool ClientNode::read_path_request()
       }
     WriteLock task_id_lock(task_id_mutex);
     current_task_id = path_request.task_id;
+    current_level_name = path_request.path[0].level_name;
 
     if (paused)
       paused = false;
