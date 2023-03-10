@@ -43,6 +43,7 @@
 
 #include <support_ros/navitaskAction.h>
 #include <support_ros/navitaskGoal.h>
+#include <tools_msgs/input.h>
 
 #include <tools_msgs/setWaypoint.h>
 #include <std_srvs/Empty.h>
@@ -77,6 +78,11 @@ public:
   using setWaypoint_srv = tools_msgs::setWaypoint;
   using setWaypoint_request = tools_msgs::setWaypoint::Request;
   using setWaypoint_response = tools_msgs::setWaypoint::Response;
+
+//调用地图切换的服务
+  using change_map_srv = tools_msgs::input;
+  using change_map_request = tools_msgs::input::Request;
+  using change_map_response = tools_msgs::input::Response;
 
   using mutipath_pub_msg = support_ros::MutiPath;
 
@@ -237,6 +243,17 @@ private:
 // check if the car arrive the waypoint(for path_nav mode add by L.L)
 
   bool if_arrive_waypoint();
+
+// -------------------------------------------------------------------------
+// change map client for freego ros server & the name of freego nav maps
+
+std::string current_map_name;
+
+ros::ServiceClient change_map_client;
+change_map_request change_map_req;
+change_map_response change_map_res;
+
+bool navis_change_maps();
 
 // -------------------------------------------------------------------------
 

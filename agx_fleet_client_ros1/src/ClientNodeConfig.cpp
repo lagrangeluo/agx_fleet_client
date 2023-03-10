@@ -181,7 +181,14 @@ ClientNodeConfig ClientNodeConfig::make()
   config.get_param_if_available(
       node_private_ns, "if_use_path_command", 
       config.if_use_path_command);
-      
+  config.get_param_if_available(
+      node_private_ns, "L1_map_name", 
+      config.L1_map_name);
+  config.get_param_if_available(
+      node_private_ns, "L2_map_name", 
+      config.L2_map_name);
+
+
   return config;
 }
 

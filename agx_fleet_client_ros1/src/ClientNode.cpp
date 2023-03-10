@@ -115,6 +115,7 @@ void ClientNode::start(Fields _fields)
 
   waypoint_add_srv = node->serviceClient<setWaypoint_srv>("/waypoint_creater/add_waypoint");
   clear_srv = node->serviceClient<clear_waypoint_srv>("/waypoint_creater/clear_waypoints");
+  change_map_client = node->serviceClient<change_map_srv>("/input/op");
 
   request_error = false;
   emergency = false;
@@ -442,6 +443,53 @@ tools_msgs::setWaypoint::Response ClientNode::get_path_from_waypoint(
     }
   }
 
+  bool ClientNode::navis_change_maps()
+  {
+    if(current_level_name.empty())
+      return false;
+    else
+    {
+      if(current_level_name == "L1")
+      {
+        if(current_map_name == client_node_config.L1_map_name)
+          return true;
+        else
+        {
+          current_map_name = client_node_config.L1_map_name;
+          //赋值请求消息
+          change_map_req.file_name = current_map_name;
+          change_map_req.id_type = "set_map";
+          change_map_req.op_type = "start";
+
+          //调用地图切换服务
+          change_map_client.call(change_map_req,change_map_res);
+          return true;
+        }
+      }
+      else if(current_level_name == "L2")
+      {
+        if(current_map_name == client_node_config.L2_map_name)
+          return true;
+        else
+        {
+          current_map_name = client_node_config.L2_map_name;
+          //赋值请求消息
+          change_map_req.file_name = current_map_name;
+          change_map_req.id_type = "set_map";
+          change_map_req.op_type = "start";
+
+          //调用地图切换服务
+          change_map_client.call(change_map_req,change_map_res);
+          return true;
+        }
+      }
+      else
+      {
+        ROS_ERROR("current_level_name is invalid!!!");
+      }
+    }
+  }
+
 bool ClientNode::read_mode_request()
 {
   messages::ModeRequest mode_request;
@@ -745,6 +793,8 @@ void ClientNode::update_thread_fn()
     get_robot_transform();
 
     read_requests();
+
+    navis_change_maps();
 
     handle_requests();
   }

@@ -52,6 +52,10 @@ struct ClientNodeConfig
   std::string dds_path_request_topic = "path_request";
   std::string dds_destination_request_topic = "destination_request";
 
+  std::string L1_map_name = "\0";
+  std::string L2_map_name = "\0";
+
+
   double wait_timeout = 10.0;
   double update_frequency = 10.0;
   double publish_frequency = 1.0;
