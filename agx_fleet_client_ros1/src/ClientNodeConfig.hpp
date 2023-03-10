@@ -54,7 +54,7 @@ struct ClientNodeConfig
 
   std::string L1_map_name = "\0";
   std::string L2_map_name = "\0";
-
+  std::string init_map_name = "\0";
 
   double wait_timeout = 10.0;
   double update_frequency = 10.0;

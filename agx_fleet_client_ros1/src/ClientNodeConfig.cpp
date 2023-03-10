@@ -187,6 +187,9 @@ ClientNodeConfig ClientNodeConfig::make()
   config.get_param_if_available(
       node_private_ns, "L2_map_name", 
       config.L2_map_name);
+  config.get_param_if_available(
+      node_private_ns, "init_map_name", 
+      config.init_map_name);
 
 
   return config;

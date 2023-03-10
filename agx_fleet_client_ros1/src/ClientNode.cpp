@@ -117,6 +117,9 @@ void ClientNode::start(Fields _fields)
   clear_srv = node->serviceClient<clear_waypoint_srv>("/waypoint_creater/clear_waypoints");
   change_map_client = node->serviceClient<change_map_srv>("/input/op");
 
+  //初始化navis楼层地图
+  current_map_name = client_node_config.init_map_name;
+
   request_error = false;
   emergency = false;
   paused = false;
