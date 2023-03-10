@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5.0)
 
-project(agx_fleet_client_bringup)
+project(agx_fleet_client_sim)
 
 #===============================================================================
 
