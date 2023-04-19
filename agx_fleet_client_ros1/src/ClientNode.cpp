@@ -485,22 +485,23 @@ void ClientNode::handle_requests()
     if (current_goal_state == GoalState::SUCCEEDED)
     {
       ROS_INFO("current goal state: SUCCEEEDED.");
+      goal_path.pop_front();
 
       // By some stroke of good fortune, we may have arrived at our goal
       // earlier than we were scheduled to reach it. If that is the case,
       // we need to wait here until it's time to proceed.
-      if (ros::Time::now() >= goal_path.front().goal_end_time)
-      {
-        goal_path.pop_front();
-      }
-      else
-      {
-        ros::Duration wait_time_remaining =
-            goal_path.front().goal_end_time - ros::Time::now();
-        ROS_INFO(
-            "we reached our goal early! Waiting %.1f more seconds",
-            wait_time_remaining.toSec());
-      }
+      // if (ros::Time::now() >= goal_path.front().goal_end_time)
+      // {
+      //   goal_path.pop_front();
+      // }
+      // else
+      // {
+      //   ros::Duration wait_time_remaining =
+      //       goal_path.front().goal_end_time - ros::Time::now();
+      //   ROS_INFO(
+      //       "we reached our goal early! Waiting %.1f more seconds",
+      //       wait_time_remaining.toSec());
+      // }
       return;
     }
     else if (current_goal_state == GoalState::ACTIVE)
