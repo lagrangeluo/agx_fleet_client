@@ -137,6 +137,7 @@ void ClientNode::battery_state_callback_fn(
 
 bool ClientNode::get_robot_transform()
 {
+  std::cout<<client_node_config.robot_name<<" tf transform get once"<<current_robot_transform.header.stamp.sec<<std::endl;
   try {
     geometry_msgs::TransformStamped tmp_transform_stamped = 
         tf2_buffer.lookupTransform(
@@ -484,9 +485,28 @@ void ClientNode::handle_requests()
     GoalState current_goal_state = fields.move_base_client->getState();
     if (current_goal_state == GoalState::SUCCEEDED)
     {
-      ROS_INFO("current goal state: SUCCEEEDED.");
       goal_path.pop_front();
+      // if(goal_path.size() == 0)
+      // 	return;
+      // else
+      // {
+      //   auto pointer = goal_path.begin();
+      //   auto current_goal_x = (*pointer).goal.target_pose.pose.position.x;
+      //   auto current_goal_y = (*pointer).goal.target_pose.pose.position.y;
+      //   auto current_location_x = current_robot_transform.transform.translation.x;
+      //   auto current_location_y = current_robot_transform.transform.translation.y;
 
+      //   const double dx = current_goal_x - current_location_x;
+      //   const double dy = current_goal_y - current_location_y;
+      //   const double dist_to_waypoint = sqrt(dx*dx + dy*dy);
+        
+      //   if(dist_to_waypoint < 0.2)
+      //   {
+      //     ROS_INFO("current goal state: SUCCEEEDED.");
+      //     goal_path.pop_front();
+      //   }
+      // }
+      return;
       // By some stroke of good fortune, we may have arrived at our goal
       // earlier than we were scheduled to reach it. If that is the case,
       // we need to wait here until it's time to proceed.
@@ -502,7 +522,6 @@ void ClientNode::handle_requests()
       //       "we reached our goal early! Waiting %.1f more seconds",
       //       wait_time_remaining.toSec());
       // }
-      return;
     }
     else if (current_goal_state == GoalState::ACTIVE)
     {

@@ -3,50 +3,59 @@
   <arg name="set_map_frame"  default="map"/>
 
   <!-- launches the basic multi turtlebot3 world -->
-  <include file="$(find turtlebot3_gazebo)/launch/rmf_test_world.launch">
+  <include file="$(find turtlebot3_gazebo)/launch/company_world.launch">
     <arg name="model" value="$(arg model)"/>
   </include>
 
   <!-- Map server -->
   <node pkg="map_server" name="map_server" type="map_server" 
-      args="$(find agx_fleet_client_sim)/maps/office.yaml">
+      args="$(find agx_fleet_client_sim)/maps/company.yaml">
     <param name="frame_id" value="$(arg set_map_frame)"/>
   </node>
 
   <!-- launch the navigation stacks of 3 turtlebot3s-->
   <arg name="tb3_0_prefix" value="tb3_0"/>
   <group ns="$(arg tb3_0_prefix)">
-    <include file="$(find agx_fleet_client_sim)/launch/include/single_turtlebot3_sim.launch">
+    <include file="$(find agx_fleet_client_sim)/launch/include/single_turtlebot3_ff.launch">
       <arg name="model" value="$(arg model)"/>
       <arg name="set_base_frame" value="$(arg tb3_0_prefix)/base_footprint"/>
       <arg name="set_odom_frame" value="$(arg tb3_0_prefix)/odom"/>
       <arg name="set_scan_frame" value="$(arg tb3_0_prefix)/base_scan"/>
       <arg name="set_map_frame" value="$(arg set_map_frame)"/>
       <arg name="open_rviz" value="false"/>
+      <arg name="initial_pose_x" default="80.70847482278975"/>
+      <arg name="initial_pose_y" default="-41.086791683174326"/>
+      <arg name="initial_pose_a" default="0.5"/>
     </include>
   </group>
 
   <arg name="tb3_1_prefix" value="tb3_1"/>
   <group ns="$(arg tb3_1_prefix)">
-    <include file="$(find agx_fleet_client_sim)/launch/include/single_turtlebot3_sim.launch">
+    <include file="$(find agx_fleet_client_sim)/launch/include/single_turtlebot3_ff.launch">
       <arg name="model" value="$(arg model)"/>
       <arg name="set_base_frame" value="$(arg tb3_1_prefix)/base_footprint"/>
       <arg name="set_odom_frame" value="$(arg tb3_1_prefix)/odom"/>
       <arg name="set_scan_frame" value="$(arg tb3_1_prefix)/base_scan"/>
       <arg name="set_map_frame" value="$(arg set_map_frame)"/>
       <arg name="open_rviz" value="false"/>
+      <arg name="initial_pose_x" default="76.01828616595819"/>
+      <arg name="initial_pose_y" default="-44.562656709838286"/>
+      <arg name="initial_pose_a" default="0.5"/>
     </include>
   </group>
 
   <arg name="tb3_2_prefix" value="tb3_2"/>
   <group ns="$(arg tb3_2_prefix)">
-    <include file="$(find agx_fleet_client_sim)/launch/include/single_turtlebot3_sim.launch">
+    <include file="$(find agx_fleet_client_sim)/launch/include/single_turtlebot3_ff.launch">
       <arg name="model" value="$(arg model)"/>
       <arg name="set_base_frame" value="$(arg tb3_2_prefix)/base_footprint"/>
       <arg name="set_odom_frame" value="$(arg tb3_2_prefix)/odom"/>
       <arg name="set_scan_frame" value="$(arg tb3_2_prefix)/base_scan"/>
       <arg name="set_map_frame" value="$(arg set_map_frame)"/>
       <arg name="open_rviz" value="false"/>
+      <arg name="initial_pose_x" default="79.01938136287028"/>
+      <arg name="initial_pose_y" default="-48.607690614618924"/>
+      <arg name="initial_pose_a" default="0.5"/>
     </include>
   </group>
 
@@ -54,11 +63,9 @@
   <node name="$(arg tb3_0_prefix)_free_fleet_client_node" 
       pkg="agx_fleet_client_ros1"
       type="agx_fleet_client_ros1" output="screen">
-    <param name="fleet_name" type="string" value="agx_fleet"/>
+    <param name="fleet_name" type="string" value="turtlebot3"/>
     <param name="robot_name" type="string" value="$(arg tb3_0_prefix)"/>
     <param name="level_name" type="string" value="L1"/>
-    <param name="update_frequency" type="double" value="10"/>
-    <param name="publish_frequency" type="double" value="2"/>
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
     <param name="battery_state_topic" value="$(arg tb3_0_prefix)/battery_state"/>
@@ -69,11 +76,9 @@
   <node name="$(arg tb3_1_prefix)_free_fleet_client_node" 
       pkg="agx_fleet_client_ros1"
       type="agx_fleet_client_ros1" output="screen">
-    <param name="fleet_name" type="string" value="agx_fleet"/>
+    <param name="fleet_name" type="string" value="turtlebot3"/>
     <param name="robot_name" type="string" value="$(arg tb3_1_prefix)"/>
     <param name="level_name" type="string" value="L1"/>
-    <param name="update_frequency" type="double" value="10"/>
-    <param name="publish_frequency" type="double" value="2"/>
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
     <param name="battery_state_topic" value="$(arg tb3_1_prefix)/battery_state"/>
@@ -84,11 +89,9 @@
   <node name="$(arg tb3_2_prefix)_free_fleet_client_node" 
       pkg="agx_fleet_client_ros1"
       type="agx_fleet_client_ros1" output="screen">
-    <param name="fleet_name" type="string" value="agx_fleet"/>
+    <param name="fleet_name" type="string" value="turtlebot3"/>
     <param name="robot_name" type="string" value="$(arg tb3_2_prefix)"/>
     <param name="level_name" type="string" value="L1"/>
-    <param name="update_frequency" type="double" value="10"/>
-    <param name="publish_frequency" type="double" value="2"/>
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
     <param name="battery_state_topic" value="$(arg tb3_2_prefix)/battery_state"/>
@@ -96,17 +99,6 @@
     <param name="move_base_server_name" value="$(arg tb3_2_prefix)/move_base"/>
   </node>
 
-  <node pkg="tf" type="static_transform_publisher" 
-      name="fake_robot_transform_0" 
-      args="0.0 34.7 0.0 0.0 0.0 0.0 1.0 map tb3_0/odom 1"/>
-
-  <node pkg="tf" type="static_transform_publisher" 
-      name="fake_robot_transform_1" 
-      args="0.0 34.7 0.0 0.0 0.0 0.0 1.0 map tb3_1/odom 1"/>
-      
-  <node pkg="tf" type="static_transform_publisher" 
-      name="fake_robot_transform_2" 
-      args="0.0 34.7 0.0 0.0 0.0 0.0 1.0 map tb3_2/odom 1"/>
   <!-- launch the overall visualization on rviz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true"
         args="-d $(find agx_fleet_client_sim)/rviz/multi_turtlebot3_ff.rviz"/>

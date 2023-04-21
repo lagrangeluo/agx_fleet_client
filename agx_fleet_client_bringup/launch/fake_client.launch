@@ -1,22 +1,36 @@
 <launch>
 
-  <node name="fake_action_server" pkg="agx_fleet_client_ros1" 
+  <arg name="agx_robot_prefix" value="tb3_0"/>
+  
+  <!--node name="fake_action_server" pkg="agx_fleet_client_ros1" 
       type="fake_action_server"/>
 
   <node name="fake_docking_server" pkg="agx_fleet_client_ros1" 
-      type="fake_docking_server"/>
+      type="fake_docking_server"/-->
   
   <node pkg="tf" type="static_transform_publisher" 
-      name="fake_robot_transform" 
-      args="0.0 0.0 0.0 0.0 0.0 0.0 1.0 base_footprint map 200"/>
+      name="fake_robot_transform_0" 
+      args="0.0 34.7 0.0 0.0 0.0 0.0 1.0 map tb3_0/odom 100"/>
 
-  <node name="fake_client_node" pkg="agx_fleet_client_ros1"
+  <node pkg="tf" type="static_transform_publisher" 
+      name="fake_robot_transform_1" 
+      args="-2.5 34.7 0.0 0.0 0.0 0.0 1.0 map tb3_1/odom 100"/>
+      
+  <node pkg="tf" type="static_transform_publisher" 
+      name="fake_robot_transform_2" 
+      args="-3.0 35.7 0.0 0.0 0.0 0.0 1.0 map tb3_2/odom 100"/>
+      
+  <node name="$(arg agx_robot_prefix)_fleet_client_node" 
+      pkg="agx_fleet_client_ros1"
       type="agx_fleet_client_ros1" output="screen">
-    <param name="fleet_name" type="string" value="fake_fleet"/>
-    <param name="robot_name" type="string" value="fake_ros1_robot"/>
+    <param name="fleet_name" type="string" value="agx_fleet"/>
+    <param name="robot_name" type="string" value="$(arg agx_robot_prefix)"/>
+    <param name="level_name" type="string" value="L1"/>
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
-    <param name="docking_trigger_server_name" type="string" value="/fake_docking_server"/>
+    <param name="battery_state_topic" value="$(arg agx_robot_prefix)/battery_state"/>
+    <param name="robot_frame" value="$(arg agx_robot_prefix)/base_link"/>
+    <param name="move_base_server_name" value="$(arg agx_robot_prefix)/move_base"/>
   </node>
   
 </launch>
