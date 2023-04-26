@@ -38,7 +38,7 @@
     </include>
   </group>
 
-  <arg name="tb3_2_prefix" value="tb3_2"/>
+  <!--arg name="tb3_2_prefix" value="tb3_2"/>
   <group ns="$(arg tb3_2_prefix)">
     <include file="$(find agx_fleet_client_sim)/launch/include/single_turtlebot3_sim.launch">
       <arg name="model" value="$(arg model)"/>
@@ -48,7 +48,7 @@
       <arg name="set_map_frame" value="$(arg set_map_frame)"/>
       <arg name="open_rviz" value="false"/>
     </include>
-  </group>
+  </group-->
 
   <!-- launch the free fleet clients of 3 turtlebot3s-->
   <node name="$(arg tb3_0_prefix)_free_fleet_client_node" 
@@ -81,7 +81,7 @@
     <param name="move_base_server_name" value="$(arg tb3_1_prefix)/move_base"/>
   </node>
 
-  <node name="$(arg tb3_2_prefix)_free_fleet_client_node" 
+  <!--node name="$(arg tb3_2_prefix)_free_fleet_client_node" 
       pkg="agx_fleet_client_ros1"
       type="agx_fleet_client_ros1" output="screen">
     <param name="fleet_name" type="string" value="agx_fleet"/>
@@ -94,7 +94,7 @@
     <param name="battery_state_topic" value="$(arg tb3_2_prefix)/battery_state"/>
     <param name="robot_frame" value="$(arg tb3_2_prefix)/base_footprint"/>
     <param name="move_base_server_name" value="$(arg tb3_2_prefix)/move_base"/>
-  </node>
+  </node-->
 
   <node pkg="tf" type="static_transform_publisher" 
       name="fake_robot_transform_0" 
