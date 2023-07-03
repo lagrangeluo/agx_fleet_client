@@ -66,45 +66,16 @@ if you want to specify robot name and fleet name, change param:
 
 
 
-
-
 ## Examples
 
-### Barebones Example
+### Test Client
 
 This example emulates a running ROS 1 robot,
 
 ```bash
-source ~/ff_ros1_ws/install/setup.bash
-roslaunch ff_examples_ros1 fake_client.launch
+source ~/agx_fleet_ws/install/setup.bash
+roslaunch agx_fleet_client_bringup fake_client.launch
 ```
-
-This example emulates a running ROS 2 robot,
-
-```bash
-source ~/ff_ros2_ws/install/setup.bash
-ros2 launch ff_examples_ros2 fake_client.launch.xml
-```
-
-The clients will then start subscribing to all the necessary topics, and start publishing robot states over DDS to the server. Start the server using
-
-```bash
-source ~/ff_ros2_ws/install/setup.bash
-ros2 launch ff_examples_ros2 fake_server.launch.xml
-
-# Verify that the server registers the fake clients
-# [INFO] [1636706176.184055177] [fake_server_node]: registered a new robot: [fake_ros1_robot]
-# [INFO] [1636706176.184055177] [fake_server_node]: registered a new robot: [fake_ros2_robot]
-```
-
-ROS 2 messages over the `/fleet_states` topic can also be used to verify that the clients are registered,
-
-```bash
-source ~/ff_ros2_ws/install/setup.bash
-ros2 topic echo /fleet_states
-```
-
-Next, to send requests and commands, check out the example scripts and their uses [here](#commands-and-requests).
 
 ### ROS 1 Turtlebot3 Simulation
 
@@ -117,8 +88,8 @@ sudo apt install ros-noetic-dwa-local-planner
 Launch the basic simulation of a single Turtlebot3, with a free fleet client attached to it, by sourcing the ROS 1 workspace and launching the provided example launch file,
 
 ```bash
-source ~/ff_ros1_ws/install/setup.bash
-export TURTLEBOT3_MODEL=burger; roslaunch ff_examples_ros1 turtlebot3_world_ff.launch
+export TURTLEBOT3_MODEL=burger
+roslaunch agx_fleet_client_sim simulation_fleet_client.launch
 ```
 
 This launch file starts the simulation in `gazebo`, visualization in `rviz`, as well as the simulated navigation stack of the single turtlebot3. Once the simulation and visualization show up, the robot can be commanded as per normal through `rviz` with `2D Nav Goal`.
@@ -131,4 +102,6 @@ If the server is already running, it should display that a new robot has been re
 
 Another way to check, is to listen in on the `/fleet_states` topic, using `ros2 topic echo /fleet_states`.
 
-Next, to send requests and commands, check out the example scripts and their uses [here](#commands-and-requests).
+If you want to send request to robots,you can use the web tools developed by rmf developers:[RMF_Pannel](https://open-rmf.github.io/rmf-panel-js/)
+
+**Attention**：The mult turtlebot simulation need to add some code to turtlebot_gazebo repository,it will not work if you don't do these changes.
