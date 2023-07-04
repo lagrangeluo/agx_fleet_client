@@ -64,7 +64,7 @@ if you want to specify robot name and fleet name, change param:
 	<param name="fleet_name" type="string" value="agx_fleet"/>
 ```
 
-
+the main branch is written for the default settings of move_base action server which belong to ros,the navis branch is developed for navis navigation stack which is developed by agilex's developers.
 
 ## Examples
 
