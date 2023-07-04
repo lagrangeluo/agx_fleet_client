@@ -8,15 +8,23 @@
   
   <node pkg="tf" type="static_transform_publisher" 
       name="fake_robot_transform" 
-      args="0.0 0.0 0.0 0.0 0.0 0.0 1.0 base_footprint map 200"/>
+      args="13.0 -27.3 0.0 0.0 0.0 0.0 1.0 base_footprint map 200"/>
 
   <node name="fake_client_node" pkg="agx_fleet_client_ros1"
       type="agx_fleet_client_ros1" output="screen">
-    <param name="fleet_name" type="string" value="fake_fleet"/>
+    <param name="fleet_name" type="string" value="agx_fleet"/>
     <param name="robot_name" type="string" value="fake_ros1_robot"/>
+    <param name="level_name" type="string" value="L1"/>
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
-    <param name="docking_trigger_server_name" type="string" value="/fake_docking_server"/>
+    <param name="battery_state_topic" value="battery_state"/>
+    <param name="robot_frame" value="base_link_2d"/>
+    <param name="map_frame" value="map"/>
+    <param name="move_base_server_name" value="move_base"/>
+    <param name="if_use_path_command" value="false"/>
+    <param name="L1_map_name" type="string" value="智园办公司"/>
+    <param name="L2_map_name" type="string" value="222"/>
+    <param name="init_map_name" type="string" value="智园办公司"/>
   </node>
   
 </launch>
