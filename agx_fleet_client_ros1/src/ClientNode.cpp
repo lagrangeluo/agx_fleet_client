@@ -137,7 +137,7 @@ void ClientNode::battery_state_callback_fn(
 
 bool ClientNode::get_robot_transform()
 {
-  std::cout<<client_node_config.robot_name<<" tf transform get once"<<current_robot_transform.header.stamp.sec<<std::endl;
+  //std::cout<<client_node_config.robot_name<<" tf transform get once"<<current_robot_transform.header.stamp.sec<<std::endl;
   try {
     geometry_msgs::TransformStamped tmp_transform_stamped = 
         tf2_buffer.lookupTransform(
