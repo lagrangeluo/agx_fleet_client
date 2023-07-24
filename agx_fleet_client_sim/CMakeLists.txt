@@ -21,7 +21,10 @@ if (catkin_FOUND)
   )
 
   install(
-    DIRECTORY maps
+    DIRECTORY 
+    maps 
+    worlds
+    param
     DESTINATION share/${PROJECT_NAME}
   )
 

@@ -37,7 +37,7 @@
     <param name="robot_name" type="string" value="$(arg tb3_name)"/>
     <param name="level_name" type="string" value="L1"/>
     <param name="update_frequency" type="double" value="10"/>
-    <param name="publish_frequency" type="double" value="2"/>
+    <param name="publish_frequency" type="double" value="5"/>
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
     <param name="battery_state_topic" value="$(arg tb3_name)/battery_state"/>
