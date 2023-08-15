@@ -43,6 +43,7 @@ function start_image()
         --device-cgroup-rule="a *:* rmw" \
         -v /dev:/dev \
         -v /home/agilex/agx_fleet_client_ws:/home/agx_fleet_client_ws \
+	-v /home/agilex/freego_ws:/home/freego_ws \
         --volume=/tmp/.X11-unix:/tmp/.X11-unix \
         -e DISPLAY=${DISPLAY} \
         $image_tag
