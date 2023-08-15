@@ -1,16 +1,19 @@
 <launch>
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="set_map_frame"  default="map"/>
+  <arg name="if_use_rviz" default="true"/>
 
-  <!-- launches the basic multi turtlebot3 gazebo world -->
+  <group unless="$(arg if_use_rviz)">
+    <!-- launches the basic multi turtlebot3 gazebo world -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find agx_fleet_client_sim)/worlds/empty.world"/>   
-    <arg name="paused" value="false"/>
-    <arg name="use_sim_time" value="true"/>
-    <arg name="gui" value="true"/>
-    <arg name="headless" value="false"/>
-    <arg name="debug" value="false"/>
-  </include>
+      <arg name="world_name" value="$(find agx_fleet_client_sim)/worlds/empty.world"/>   
+      <arg name="paused" value="false"/>
+      <arg name="use_sim_time" value="true"/>
+      <arg name="gui" value="true"/>
+      <arg name="headless" value="false"/>
+      <arg name="debug" value="false"/>
+    </include>
+  </group>
 
   <!-- Map server -->
   <node pkg="map_server" name="map_server" type="map_server" 
@@ -20,6 +23,7 @@
 
   <!-- launches all file of multi turtlebot3  -->
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_0"/>
     <arg name="set_map_frame" value="map"/>
@@ -30,6 +34,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_1"/>
     <arg name="set_map_frame" value="map"/>
@@ -40,6 +45,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_2"/>
     <arg name="set_map_frame" value="map"/>
@@ -50,6 +56,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_3"/>
     <arg name="set_map_frame" value="map"/>
@@ -60,6 +67,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_4"/>
     <arg name="set_map_frame" value="map"/>
@@ -70,6 +78,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_5"/>
     <arg name="set_map_frame" value="map"/>
@@ -80,6 +89,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_6"/>
     <arg name="set_map_frame" value="map"/>
@@ -90,6 +100,7 @@
   </include> 
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_7"/>
     <arg name="set_map_frame" value="map"/>
@@ -100,6 +111,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_8"/>
     <arg name="set_map_frame" value="map"/>
@@ -110,6 +122,7 @@
   </include>
 
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_9"/>
     <arg name="set_map_frame" value="map"/>
@@ -120,6 +133,7 @@
   </include>
 
   <!--include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_10"/>
     <arg name="set_map_frame" value="map"/>
@@ -130,6 +144,7 @@
   </include-->
 
   <!--include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_all_sim.launch">
+    <arg name="if_use_rviz" value="$(arg if_use_rviz)"/>  
     <arg name="model" value="$(arg model)"/>
     <arg name="tb3_name"  value="tb3_11"/>
     <arg name="set_map_frame" value="map"/>

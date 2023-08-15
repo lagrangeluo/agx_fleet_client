@@ -3,12 +3,29 @@
  <arg name="model" default="burger"/>
  <arg name="tb3_name"  default="tb3_0"/>
  <arg name="set_map_frame" default="map"/>
+ <arg name="if_use_rviz" default="true"/>
 
  <arg name="tb3_x_pos" default="0.0"/>
  <arg name="tb3_y_pos" default="0.0"/>
  <arg name="tb3_z_pos" default="0.0"/>
  <arg name="tb3_yaw"   default="0.0"/>
 
+  <!-- launches the basic single turtlebot3 rviz model -->
+<group if="$(arg if_use_rviz)">
+  <node name="$(arg tb3_name)_rviz_base_node"
+     pkg="agx_fleet_client_sim"
+     type="scout_base_node" output="screen">
+     <param name="odom_frame" value="$(arg tb3_name)/odom"/>
+     <param name="base_frame" value="$(arg tb3_name)/base_footprint"/>
+     <param name="scan_topic" value="$(arg tb3_name)/scan"/>
+     <param name="odom_topic_name" value="$(arg tb3_name)/odom"/>
+     <param name="cmd_topic_name" value="$(arg tb3_name)/cmd_vel"/>       
+     <param name="control_rate" value="50"/>
+     <param name="pub_tf" value="true" />
+    </node>
+</group>
+
+<group unless="$(arg if_use_rviz)">
   <!-- launches the basic single turtlebot3 gazebo model -->
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_gazebo_sim.launch">
     <arg name="model" value="$(arg model)"/>
@@ -18,6 +35,7 @@
     <arg name="tb3_z_pos" value="$(arg tb3_z_pos)"/>
     <arg name="tb3_yaw"   value="$(arg tb3_yaw)"/>
   </include>
+</group>
 
   <!-- launch the navigation stacks of 3 turtlebot3s-->
   <include file="$(find agx_fleet_client_sim)/launch/include/single_tb3_nav_sim.launch">
@@ -37,7 +55,7 @@
     <param name="robot_name" type="string" value="$(arg tb3_name)"/>
     <param name="level_name" type="string" value="L1"/>
     <param name="update_frequency" type="double" value="10"/>
-    <param name="publish_frequency" type="double" value="5"/>
+    <param name="publish_frequency" type="double" value="4"/>
     <param name="dds_domain" type="int" value="42"/>
     <param name="max_dist_to_first_waypoint" type="double" value="10.0"/>
     <param name="battery_state_topic" value="$(arg tb3_name)/battery_state"/>
